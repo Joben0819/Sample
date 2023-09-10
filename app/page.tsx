@@ -1,95 +1,100 @@
+'use client'
 import Image from 'next/image'
 import styles from './page.module.css'
+import React,{useState, useEffect} from 'react'
+import Header from 'about/Header'
+import Footer from 'about/Footer'
+// import Data from './about/[id]/page'
+// import Data from '@/api/[id]/index'
+//import Data3 from './about/[id]/page'
+import{ getGameTypes, Login, Browseinit, AccountInfo} from '@/Actions/Api'
+import axios from 'axios'
+import { useSession, signIn, signOut } from 'next-auth/react'
+// const gametypes = async() => {
+//   const a = 'api/game88-game-app'
+//   const b = await  fetch(`${a}/toWashCode`)
+//   const res = await b.json()
+
+//   return
+
+// }
+
 
 export default function Home() {
+  const { data: session } = useSession()
+  const [user, setUser] = useState('');
+  const [pwd, setPwd] = useState('');
+  useEffect(() => {
+    // const a = 'api/game88-game-app'
+    // localStorage.setItem('aa', 'https://g8vns.dgg8.cn')
+    // fetch(`https://game99.feiwindevelopment.com//game99-platform-app-web/login`)
+    // .then(res => res.json())
+    // .then(data => console.log('data',data))
+    // .catch(error => console.error('Error:', error));
+
+  }, []);
+  const handleSubmit = (event : any) => {
+    event.preventDefault();
+    Login({mobile: user, passwd: pwd})
+    .then((res) => {
+      console.warn('log',res)
+    })
+  };
+
+  useEffect(() => {
+     getGameTypes()
+    .then((res) => {
+      console.warn("helloo",res)
+    })
+  },[])
+  // console.warn("helloo")
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+      <Header/>
+      <div>ss</div>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="username">Username</label>
+        <input
+          type="text"
+          placeholder="username"
+          value={user}
+          onChange={(e) => setUser(e.target.value)}
+          id="user"
         />
+        <br />
+        <br />
+        <label htmlFor="password">Password</label>
+        <input
+          type="password" // Use "password" type for password input
+          placeholder="password"
+          value={pwd}
+          onChange={(e) => setPwd(e.target.value)}
+          id="pwd"
+        />
+        <br />
+        <br />
+        <button type="submit">Submit</button>
+      </form>
+      <div>
+        {/* {session ? (
+          <>
+            {session.user ? (
+              <>
+                <p>Welcome, {session.user.name}!</p>
+                <button onClick={() => signOut()}>Sign Out</button>
+              </>
+            ) : (
+              <p>Loading user data...</p>
+            )}
+          </>
+        ) : (
+          <>
+            <p>You are not signed in.</p>
+            <button onClick={() => signIn('google')}>Sign In with Google</button>
+          </>
+        )} */}
       </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      < Footer/>
     </main>
   )
 }
